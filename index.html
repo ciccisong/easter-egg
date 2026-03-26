@@ -2,705 +2,275 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <title>评论彩蛋功能 Demo</title>
 <style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
-    background: #f0f2f5;
-    color: #1a1a1a;
-    overflow-x: hidden;
-  }
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif;background:#f5f5f5;color:#333;overflow-x:hidden}
 
-  /* ===== Header ===== */
-  .page-header {
-    background: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%);
-    color: white;
-    padding: 44px 20px 32px;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-  }
-  .page-header::before {
-    content: '';
-    position: absolute;
-    top: -50%; left: -50%;
-    width: 200%; height: 200%;
-    background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 60%);
-    animation: headerShine 6s ease-in-out infinite;
-  }
-  @keyframes headerShine {
-    0%,100% { transform: translate(0,0); }
-    50% { transform: translate(10%,5%); }
-  }
-  .page-header h1 { font-size: 26px; font-weight: 800; margin-bottom: 8px; position: relative; letter-spacing: 1px; }
-  .page-header p { font-size: 13px; opacity: 0.8; position: relative; }
+/* ===== Header (Story style) ===== */
+.page-header{background:#fff;color:#333;padding:44px 20px 24px;text-align:center;border-bottom:.5px solid #e8e8e8}
+.page-header h1{font-size:24px;font-weight:800;margin-bottom:6px;color:#1a1a1a}
+.page-header h1 .demo-tag{display:inline-block;background:#07C160;color:#fff;font-size:11px;font-weight:700;padding:2px 8px;border-radius:4px;margin-left:8px;vertical-align:middle;letter-spacing:1px}
+.page-header p{font-size:13px;color:#999}
 
-  /* ===== Navigation Tabs ===== */
-  .nav-tabs {
-    display: flex;
-    background: white;
-    box-shadow: 0 1px 12px rgba(0,0,0,0.06);
-    position: sticky;
-    top: 0;
-    z-index: 100;
-  }
-  .nav-tab {
-    flex: 1;
-    padding: 14px 6px;
-    text-align: center;
-    font-size: 13px;
-    font-weight: 500;
-    color: #999;
-    cursor: pointer;
-    border-bottom: 2.5px solid transparent;
-    transition: all 0.3s;
-    background: none;
-    border-top: none; border-left: none; border-right: none;
-  }
-  .nav-tab.active {
-    color: #6366f1;
-    border-bottom-color: #6366f1;
-    font-weight: 700;
-  }
-  .nav-tab:hover { color: #6366f1; }
+/* ===== Navigation Tabs ===== */
+.nav-tabs{display:flex;background:#fff;box-shadow:0 1px 0 rgba(0,0,0,.06);position:sticky;top:0;z-index:100}
+.nav-tab{flex:1;padding:14px 6px;text-align:center;font-size:13px;font-weight:500;color:#999;cursor:pointer;border-bottom:2.5px solid transparent;transition:all .3s;background:none;border-top:none;border-left:none;border-right:none}
+.nav-tab.active{color:#07C160;border-bottom-color:#07C160;font-weight:700}
+.nav-tab:hover{color:#07C160}
 
-  /* ===== Scene Container ===== */
-  .scene { display: none; padding: 20px; max-width: 440px; margin: 0 auto; }
-  .scene.active { display: block; }
-  .scene-title { font-size: 18px; font-weight: 700; margin-bottom: 6px; color: #1a1a1a; }
-  .scene-desc { font-size: 13px; color: #888; margin-bottom: 20px; line-height: 1.6; }
+/* ===== Scene Container ===== */
+.scene{display:none;padding:20px;max-width:440px;margin:0 auto}
+.scene.active{display:block}
+.scene-title{font-size:18px;font-weight:700;margin-bottom:6px;color:#1a1a1a}
+.scene-desc{font-size:13px;color:#999;margin-bottom:20px;line-height:1.6}
 
-  /* ===== Phone Frame ===== */
-  .phone-frame {
-    width: 375px;
-    margin: 0 auto;
-    background: #fff;
-    border-radius: 40px;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.12), 0 0 0 1px rgba(0,0,0,0.04);
-    overflow: hidden;
-    border: 6px solid #1a1a1a;
-    position: relative;
-  }
-  .phone-notch {
-    width: 126px; height: 30px;
-    background: #1a1a1a;
-    border-radius: 0 0 20px 20px;
-    margin: 0 auto;
-    position: relative; z-index: 10;
-  }
-  .phone-screen {
-    min-height: 700px;
-    background: #f7f7f7;
-    position: relative;
-  }
-  .phone-wrapper { position: relative; width: 375px; margin: 0 auto; }
+/* ===== Phone Frame (Story style — light border) ===== */
+.phone-frame{width:375px;margin:0 auto;background:#fff;border-radius:40px;box-shadow:0 20px 60px rgba(0,0,0,.12),0 0 0 1px rgba(0,0,0,.06);overflow:hidden;border:6px solid #e0e0e0;position:relative}
+.phone-notch{width:126px;height:30px;background:#1a1a1a;border-radius:0 0 20px 20px;margin:0 auto;position:relative;z-index:10}
+.phone-screen{min-height:700px;background:#fff;position:relative;overflow:hidden}
+.phone-wrapper{position:relative;width:375px;margin:0 auto}
 
-  /* ===== Status Bar ===== */
-  .status-bar {
-    display: flex; justify-content: space-between; align-items: center;
-    padding: 2px 24px 6px;
-    font-size: 12px; font-weight: 600;
-    background: white;
-  }
-  .status-bar .time { font-size: 15px; font-weight: 700; }
+/* ===== Status Bar ===== */
+.status-bar{display:flex;justify-content:space-between;align-items:center;padding:2px 24px 6px;font-size:12px;font-weight:600;background:#fff;color:#1a1a1a}
+.status-bar .time{font-size:15px;font-weight:700}
 
-  /* ===== App Nav Bar ===== */
-  .app-nav {
-    display: flex; align-items: center;
-    padding: 10px 16px;
-    background: white;
-    border-bottom: 0.5px solid #e5e5e5;
-  }
-  .app-nav .back { font-size: 22px; color: #333; cursor: pointer; width: 32px; }
-  .app-nav .title { flex: 1; text-align: center; font-size: 17px; font-weight: 600; color: #1a1a1a; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; padding: 0 8px; }
-  .app-nav .action { font-size: 20px; color: #666; width: 32px; text-align: right; }
+/* ===== App Nav Bar ===== */
+.app-nav{display:flex;align-items:center;padding:10px 16px;background:#fff;border-bottom:.5px solid #eee}
+.app-nav .back{font-size:22px;color:#333;cursor:pointer;width:32px}
+.app-nav .title{flex:1;text-align:center;font-size:17px;font-weight:600;color:#1a1a1a;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:0 8px}
+.app-nav .action{font-size:20px;color:#666;width:32px;text-align:right}
 
-  /* ===== Post Content (matching screenshot style) ===== */
-  .post-content { background: white; padding: 16px; }
-  .post-author {
-    display: flex; align-items: center; gap: 10px; margin-bottom: 14px;
-  }
-  .avatar {
-    width: 40px; height: 40px; border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 18px; color: white; flex-shrink: 0;
-    object-fit: cover; overflow: hidden;
-  }
-  .avatar img { width: 100%; height: 100%; object-fit: cover; }
-  .avatar.author-main { background: linear-gradient(135deg, #ff6b6b, #ffa502); }
-  .author-info .name { font-size: 15px; font-weight: 600; color: #1a1a1a; }
-  .author-info .follow-btn {
-    display: inline-block; font-size: 11px; color: #6366f1; background: #f0eeff;
-    padding: 2px 10px; border-radius: 10px; margin-left: 8px; font-weight: 500;
-  }
-  .author-info .meta { font-size: 12px; color: #bbb; margin-top: 2px; }
+/* Demo label (Story style) */
+.demo-label{position:absolute;top:36px;right:-2px;background:#07C160;color:#fff;font-size:10px;padding:3px 12px 3px 8px;border-radius:6px 0 0 6px;font-weight:700;z-index:50;letter-spacing:1px}
 
-  .post-title { font-size: 17px; font-weight: 700; color: #1a1a1a; margin-bottom: 10px; line-height: 1.4; }
-  .post-text { font-size: 15px; line-height: 1.8; color: #333; margin-bottom: 14px; }
-  .post-text .highlight { color: #6366f1; font-weight: 500; }
-  .post-text .num-tag {
-    display: inline-flex; align-items: center; justify-content: center;
-    width: 20px; height: 20px; border-radius: 5px;
-    font-size: 12px; font-weight: 700; color: white; margin-right: 4px;
-    vertical-align: middle;
-  }
-  .post-text .num-tag.t1 { background: #6366f1; }
-  .post-text .num-tag.t2 { background: #8b5cf6; }
-  .post-text .num-tag.t3 { background: #a855f7; }
-  .post-text .num-tag.t4 { background: #d946ef; }
+/* ===== Post Content ===== */
+.post-content{background:#fff;padding:16px}
+.post-author{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.avatar{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;color:#fff;flex-shrink:0;object-fit:cover;overflow:hidden}
+.avatar img{width:100%;height:100%;object-fit:cover}
+.avatar.author-main{background:linear-gradient(135deg,#07C160,#00e676)}
+.author-info .name{font-size:15px;font-weight:600;color:#1a1a1a}
+.author-info .follow-btn{display:inline-block;font-size:11px;color:#07C160;background:#e8f5e9;padding:2px 10px;border-radius:10px;margin-left:8px;font-weight:500}
+.author-info .meta{font-size:12px;color:#bbb;margin-top:2px}
 
-  .post-images {
-    border-radius: 12px; overflow: hidden; margin-bottom: 14px;
-  }
-  .post-single-img {
-    width: 100%; aspect-ratio: 3/4; position: relative; overflow: hidden;
-    /* Dark warm desk scene background */
-    background: linear-gradient(180deg, #1a1510 0%, #2a2018 20%, #3d2e1f 50%, #5c4633 80%, #3d2e1f 100%);
-  }
-  /* Retro Macintosh dock - main element */
-  .retro-mac {
-    position: absolute;
-    top: 8%; right: 10%; width: 55%; height: 75%;
-    background: linear-gradient(180deg, #d4c8b0 0%, #e8dcc4 8%, #f0e6d0 15%, #e8dcc4 50%, #d4c8b0 85%, #c8bca4 100%);
-    border-radius: 8px 8px 4px 4px;
-    box-shadow: -4px 4px 20px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.3);
-  }
-  /* Screen area */
-  .retro-mac .screen-frame {
-    position: absolute; top: 6%; left: 8%; right: 8%; height: 58%;
-    background: #111; border-radius: 6px;
-    box-shadow: inset 0 2px 8px rgba(0,0,0,0.8);
-    overflow: hidden;
-  }
-  .retro-mac .screen-content {
-    position: absolute; top: 4%; left: 3%; right: 3%; bottom: 4%;
-    background: linear-gradient(135deg, #1a3a5c 0%, #2d5a8c 30%, #1e4a7a 60%, #163d66 100%);
-    border-radius: 3px;
-    overflow: hidden;
-  }
-  /* macOS top bar */
-  .retro-mac .macos-bar {
-    height: 12%; background: rgba(255,255,255,0.12);
-    display: flex; align-items: center; padding: 0 5%;
-    gap: 3px;
-  }
-  .retro-mac .macos-bar .dot { width: 4px; height: 4px; border-radius: 50%; }
-  .retro-mac .macos-bar .dot.red { background: #ff5f57; }
-  .retro-mac .macos-bar .dot.yellow { background: #febc2e; }
-  .retro-mac .macos-bar .dot.green { background: #28c840; }
-  /* Fake window content */
-  .retro-mac .fake-window {
-    margin: 4% 5%; background: rgba(255,255,255,0.92); border-radius: 4px;
-    height: 70%; padding: 6%;
-  }
-  .retro-mac .fake-line {
-    height: 6%; background: #e0e0e0; border-radius: 2px; margin-bottom: 6%;
-  }
-  .retro-mac .fake-line.short { width: 60%; }
-  .retro-mac .fake-line.blue { background: #3b82f6; width: 40%; height: 8%; }
-  /* Bottom of mac - disk slots + apple logo */
-  .retro-mac .mac-bottom {
-    position: absolute; bottom: 6%; left: 10%; right: 10%;
-    display: flex; justify-content: space-between; align-items: center;
-  }
-  .retro-mac .disk-slot {
-    width: 35%; height: 4px; background: #b0a490; border-radius: 2px;
-    box-shadow: inset 0 1px 2px rgba(0,0,0,0.3);
-  }
-  .retro-mac .apple-rainbow {
-    width: 20px; height: 24px;
-    background: linear-gradient(180deg, #61bb46 0%, #61bb46 16.6%, #fdb827 16.6%, #fdb827 33.3%, #f5821f 33.3%, #f5821f 50%, #e03a3e 50%, #e03a3e 66.6%, #963d97 66.6%, #963d97 83.3%, #009ddc 83.3%, #009ddc 100%);
-    border-radius: 2px;
-  }
-  .retro-mac .display-label {
-    position: absolute; bottom: 16%; left: 12%;
-    font-size: 7px; color: #8a7e6c; font-style: italic; font-weight: 600;
-    letter-spacing: 0.5px;
-  }
-  /* Raspberry Pi on the left */
-  .rpi-board {
-    position: absolute; bottom: 15%; left: 5%; width: 22%; height: 25%;
-    background: linear-gradient(135deg, #c23b22, #a83220);
-    border-radius: 3px; box-shadow: 2px 2px 8px rgba(0,0,0,0.4);
-  }
-  .rpi-screen {
-    position: absolute; top: -40%; left: 10%; width: 80%; height: 35%;
-    background: #1a1a1a; border-radius: 2px;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.5);
-  }
-  .rpi-screen-content {
-    position: absolute; top: 10%; left: 8%; right: 8%; bottom: 10%;
-    background: #0a2a0a; border-radius: 1px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 5px; color: #33ff33; font-family: monospace;
-  }
-  /* Monitor on top */
-  .top-monitor {
-    position: absolute; top: 0; left: 15%; right: 20%; height: 12%;
-    background: linear-gradient(180deg, #0d0d0d, #1a1a1a);
-    border-radius: 0 0 4px 4px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.5);
-  }
-  /* Desk surface */
-  .desk-surface {
-    position: absolute; bottom: 0; left: 0; right: 0; height: 12%;
-    background: linear-gradient(180deg, #5c4633, #4a3828);
-    box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
-  }
+.post-title{font-size:17px;font-weight:700;color:#1a1a1a;margin-bottom:10px;line-height:1.4}
+.post-text{font-size:15px;line-height:1.8;color:#333;margin-bottom:14px}
+.post-text .highlight{color:#07C160;font-weight:500}
+.post-text .num-tag{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:5px;font-size:12px;font-weight:700;color:#fff;margin-right:4px;vertical-align:middle}
+.post-text .num-tag.t1{background:#07C160}
+.post-text .num-tag.t2{background:#00a854}
+.post-text .num-tag.t3{background:#009688}
+.post-text .num-tag.t4{background:#26a69a}
 
-  /* Bottom action bar (like screenshot) */
-  .post-bottom-bar {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 12px 0 0;
-    border-top: 0.5px solid #f0f0f0;
-  }
-  .bottom-actions {
-    display: flex; gap: 20px;
-  }
-  .bottom-action {
-    display: flex; flex-direction: column; align-items: center; gap: 2px;
-    font-size: 11px; color: #999;
-  }
-  .bottom-action .icon { font-size: 20px; }
-  .bottom-action .count { font-weight: 600; color: #666; }
+.post-images{border-radius:12px;overflow:hidden;margin-bottom:14px}
+.post-single-img{width:100%;aspect-ratio:3/4;position:relative;overflow:hidden;background:linear-gradient(180deg,#1a1510 0%,#2a2018 20%,#3d2e1f 50%,#5c4633 80%,#3d2e1f 100%)}
+.retro-mac{position:absolute;top:8%;right:10%;width:55%;height:75%;background:linear-gradient(180deg,#d4c8b0 0%,#e8dcc4 8%,#f0e6d0 15%,#e8dcc4 50%,#d4c8b0 85%,#c8bca4 100%);border-radius:8px 8px 4px 4px;box-shadow:-4px 4px 20px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.3)}
+.retro-mac .screen-frame{position:absolute;top:6%;left:8%;right:8%;height:58%;background:#111;border-radius:6px;box-shadow:inset 0 2px 8px rgba(0,0,0,.8);overflow:hidden}
+.retro-mac .screen-content{position:absolute;top:4%;left:3%;right:3%;bottom:4%;background:linear-gradient(135deg,#1a3a5c 0%,#2d5a8c 30%,#1e4a7a 60%,#163d66 100%);border-radius:3px;overflow:hidden}
+.retro-mac .macos-bar{height:12%;background:rgba(255,255,255,.12);display:flex;align-items:center;padding:0 5%;gap:3px}
+.retro-mac .macos-bar .dot{width:4px;height:4px;border-radius:50%}
+.retro-mac .macos-bar .dot.red{background:#ff5f57}
+.retro-mac .macos-bar .dot.yellow{background:#febc2e}
+.retro-mac .macos-bar .dot.green{background:#28c840}
+.retro-mac .fake-window{margin:4% 5%;background:rgba(255,255,255,.92);border-radius:4px;height:70%;padding:6%}
+.retro-mac .fake-line{height:6%;background:#e0e0e0;border-radius:2px;margin-bottom:6%}
+.retro-mac .fake-line.short{width:60%}
+.retro-mac .fake-line.blue{background:#07C160;width:40%;height:8%}
+.retro-mac .display-label{position:absolute;bottom:16%;left:12%;font-size:7px;color:#8a7e6c;font-style:italic;font-weight:600;letter-spacing:.5px}
+.retro-mac .mac-bottom{position:absolute;bottom:6%;left:10%;right:10%;display:flex;justify-content:space-between;align-items:center}
+.retro-mac .disk-slot{width:35%;height:4px;background:#b0a490;border-radius:2px;box-shadow:inset 0 1px 2px rgba(0,0,0,.3)}
+.retro-mac .apple-rainbow{width:20px;height:24px;background:linear-gradient(180deg,#61bb46 0%,#61bb46 16.6%,#fdb827 16.6%,#fdb827 33.3%,#f5821f 33.3%,#f5821f 50%,#e03a3e 50%,#e03a3e 66.6%,#963d97 66.6%,#963d97 83.3%,#009ddc 83.3%,#009ddc 100%);border-radius:2px}
+.rpi-board{position:absolute;bottom:15%;left:5%;width:22%;height:25%;background:linear-gradient(135deg,#c23b22,#a83220);border-radius:3px;box-shadow:2px 2px 8px rgba(0,0,0,.4)}
+.rpi-screen{position:absolute;top:-40%;left:10%;width:80%;height:35%;background:#1a1a1a;border-radius:2px;box-shadow:0 1px 4px rgba(0,0,0,.5)}
+.rpi-screen-content{position:absolute;top:10%;left:8%;right:8%;bottom:10%;background:#0a2a0a;border-radius:1px;display:flex;align-items:center;justify-content:center;font-size:5px;color:#33ff33;font-family:monospace}
+.top-monitor{position:absolute;top:0;left:15%;right:20%;height:12%;background:linear-gradient(180deg,#0d0d0d,#1a1a1a);border-radius:0 0 4px 4px;box-shadow:0 4px 12px rgba(0,0,0,.5)}
+.desk-surface{position:absolute;bottom:0;left:0;right:0;height:12%;background:linear-gradient(180deg,#5c4633,#4a3828);box-shadow:inset 0 2px 4px rgba(0,0,0,.3)}
 
-  /* ===== Comment Section (matching screenshot) ===== */
-  .comment-section { background: white; padding: 16px; }
-  .comment-section-header {
-    display: flex; align-items: center; justify-content: space-between;
-    margin-bottom: 14px; padding-bottom: 12px; border-bottom: 0.5px solid #f0f0f0;
-  }
-  .comment-section-title { font-size: 15px; font-weight: 700; color: #1a1a1a; }
-  .comment-count { font-size: 13px; color: #bbb; }
-  .comment-sort { font-size: 12px; color: #999; }
+/* Bottom action bar */
+.post-bottom-bar{display:flex;align-items:center;justify-content:space-between;padding:12px 0 0;border-top:.5px solid #f0f0f0}
+.bottom-actions{display:flex;gap:20px}
+.bottom-action{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:11px;color:#999}
+.bottom-action .icon{font-size:20px}
+.bottom-action .count{font-weight:600;color:#666}
 
-  /* Comment item (screenshot style) */
-  .comment-item {
-    display: flex; gap: 10px; padding: 14px 0;
-    border-bottom: 0.5px solid #f5f5f5;
-    position: relative;
-  }
-  .comment-item:last-child { border-bottom: none; }
-  .comment-avatar {
-    width: 36px; height: 36px; border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 14px; color: white; flex-shrink: 0;
-    overflow: hidden;
-  }
-  .ca-1 { background: linear-gradient(135deg, #f97316, #fb923c); }
-  .ca-2 { background: linear-gradient(135deg, #06b6d4, #22d3ee); }
-  .ca-3 { background: linear-gradient(135deg, #8b5cf6, #a78bfa); }
-  .ca-4 { background: linear-gradient(135deg, #ec4899, #f472b6); }
-  .ca-5 { background: linear-gradient(135deg, #10b981, #34d399); }
-  .ca-6 { background: linear-gradient(135deg, #6366f1, #818cf8); }
-  .comment-body { flex: 1; min-width: 0; }
-  .comment-name {
-    font-size: 13px; font-weight: 600; color: #333;
-    display: flex; align-items: center; gap: 6px;
-  }
-  .author-badge {
-    display: inline-block; font-size: 10px; color: #6366f1; background: #f0eeff;
-    padding: 1px 6px; border-radius: 4px; font-weight: 600;
-  }
-  .liked-badge { font-size: 11px; color: #f59e0b; font-weight: 500; }
-  .comment-text { font-size: 14px; color: #333; line-height: 1.6; margin-top: 4px; }
-  .comment-meta {
-    font-size: 12px; color: #ccc; margin-top: 6px;
-    display: flex; align-items: center; gap: 16px;
-  }
-  .comment-meta .location { color: #ccc; }
-  .comment-actions { display: flex; gap: 16px; margin-left: auto; }
-  .comment-action-btn {
-    display: flex; align-items: center; gap: 3px;
-    font-size: 12px; color: #ccc; cursor: pointer;
-  }
-  .sub-reply-hint {
-    font-size: 13px; color: #999; margin-top: 8px; padding-left: 46px;
-    cursor: pointer;
-  }
+/* ===== Comment Section ===== */
+.comment-section{background:#fff;padding:16px}
+.comment-section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;padding-bottom:12px;border-bottom:.5px solid #f0f0f0}
+.comment-section-title{font-size:15px;font-weight:700;color:#1a1a1a}
+.comment-count{font-size:13px;color:#bbb}
+.comment-sort{font-size:12px;color:#999}
 
-  /* Sub-comment (reply) */
-  .sub-comment {
-    margin-left: 46px; padding: 10px 0;
-    display: flex; gap: 8px;
-    border-bottom: 0.5px solid #f8f8f8;
-  }
-  .sub-comment .comment-avatar { width: 28px; height: 28px; font-size: 11px; }
+/* Comment item */
+.comment-item{display:flex;gap:10px;padding:14px 0;border-bottom:.5px solid #f5f5f5;position:relative}
+.comment-item:last-child{border-bottom:none}
+.comment-avatar{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;color:#fff;flex-shrink:0;overflow:hidden}
+.ca-1{background:linear-gradient(135deg,#f97316,#fb923c)}
+.ca-2{background:linear-gradient(135deg,#06b6d4,#22d3ee)}
+.ca-3{background:linear-gradient(135deg,#8b5cf6,#a78bfa)}
+.ca-4{background:linear-gradient(135deg,#ec4899,#f472b6)}
+.ca-5{background:linear-gradient(135deg,#10b981,#34d399)}
+.ca-6{background:linear-gradient(135deg,#07C160,#4caf50)}
+.comment-body{flex:1;min-width:0}
+.comment-name{font-size:13px;font-weight:600;color:#333;display:flex;align-items:center;gap:6px}
+.author-badge{display:inline-block;font-size:10px;color:#07C160;background:#e8f5e9;padding:1px 6px;border-radius:4px;font-weight:600}
+.liked-badge{font-size:11px;color:#f59e0b;font-weight:500}
+.comment-text{font-size:14px;color:#333;line-height:1.6;margin-top:4px}
+.comment-meta{font-size:12px;color:#ccc;margin-top:6px;display:flex;align-items:center;gap:16px}
+.comment-meta .location{color:#ccc}
+.comment-actions{display:flex;gap:16px;margin-left:auto}
+.comment-action-btn{display:flex;align-items:center;gap:3px;font-size:12px;color:#ccc;cursor:pointer}
+.sub-reply-hint{font-size:13px;color:#999;margin-top:8px;padding-left:46px;cursor:pointer}
 
-  /* ===== Easter Egg Hint Banner (redesigned) ===== */
-  .egg-hint-banner {
-    background: linear-gradient(135deg, #fef3c7, #fde68a);
-    border: 1.5px solid #fbbf24;
-    border-radius: 12px;
-    padding: 10px 14px;
-    margin-bottom: 14px;
-    display: flex; align-items: center; gap: 8px;
-    font-size: 13px; color: #92400e; font-weight: 500;
-    position: relative; overflow: hidden;
-  }
-  .egg-hint-banner .icon { font-size: 18px; }
-  .egg-hint-banner::after {
-    content: ''; position: absolute; top: 0; right: 0; bottom: 0;
-    width: 80px;
-    background: linear-gradient(90deg, transparent, rgba(251,191,36,0.15));
-  }
+/* Sub-comment */
+.sub-comment{margin-left:46px;padding:10px 0;display:flex;gap:8px;border-bottom:.5px solid #f8f8f8}
+.sub-comment .comment-avatar{width:28px;height:28px;font-size:11px}
 
-  /* ===== Easter Egg Reply (Redesigned - more youthful) ===== */
-  .egg-reply-wrapper {
-    margin-left: 46px; margin-top: -4px; margin-bottom: 4px;
-    position: relative;
-  }
-  .egg-reply {
-    background: linear-gradient(135deg, #fef9c3 0%, #fef08a 40%, #fde047 100%);
-    border: 1.5px solid #facc15;
-    border-radius: 16px;
-    padding: 12px 14px;
-    position: relative;
-    box-shadow: 0 4px 20px rgba(250, 204, 21, 0.2);
-  }
-  .egg-reply::before {
-    content: ''; position: absolute;
-    top: -7px; left: 18px;
-    width: 14px; height: 14px;
-    background: #fef9c3;
-    border-left: 1.5px solid #facc15; border-top: 1.5px solid #facc15;
-    transform: rotate(45deg);
-  }
-  .egg-reply-tag {
-    display: inline-flex; align-items: center; gap: 4px;
-    background: linear-gradient(135deg, #f59e0b, #d97706);
-    color: white; padding: 3px 10px; border-radius: 20px;
-    font-size: 11px; font-weight: 700; margin-bottom: 8px;
-    box-shadow: 0 2px 8px rgba(245,158,11,0.3);
-  }
-  .egg-reply-author {
-    display: flex; align-items: center; gap: 6px; margin-bottom: 6px;
-  }
-  .egg-reply-author-avatar {
-    width: 24px; height: 24px; border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 10px; color: white;
-    background: linear-gradient(135deg, #ff6b6b, #ffa502);
-    border: 2px solid #facc15;
-  }
-  .egg-reply-author-name { font-size: 12px; font-weight: 700; color: #92400e; }
-  .egg-reply-text { font-size: 14px; color: #78350f; line-height: 1.6; }
+/* ===== Easter Egg Hint Banner ===== */
+.egg-hint-banner{background:#e8f5e9;border:1.5px solid #81c784;border-radius:12px;padding:10px 14px;margin-bottom:14px;display:flex;align-items:center;gap:8px;font-size:13px;color:#2e7d32;font-weight:500;position:relative;overflow:hidden}
+.egg-hint-banner .icon{font-size:18px}
+.egg-hint-banner::after{content:'';position:absolute;top:0;right:0;bottom:0;width:80px;background:linear-gradient(90deg,transparent,rgba(129,199,132,.15))}
 
-  .egg-sparkles {
-    position: absolute; font-size: 12px; pointer-events: none;
-    animation: sparkleFloat 2s ease-in-out infinite;
-  }
-  .egg-sparkles.s1 { top: -8px; right: 12px; animation-delay: 0s; }
-  .egg-sparkles.s2 { top: 4px; right: 32px; animation-delay: 0.4s; }
-  .egg-sparkles.s3 { bottom: -4px; right: 8px; animation-delay: 0.8s; }
-  @keyframes sparkleFloat {
-    0%, 100% { transform: translateY(0) scale(1); opacity: 1; }
-    50% { transform: translateY(-5px) scale(1.3); opacity: 0.6; }
-  }
+/* ===== Easter Egg Reply ===== */
+.egg-reply-wrapper{margin-left:46px;margin-top:-4px;margin-bottom:4px;position:relative}
+.egg-reply{background:linear-gradient(135deg,#e8f5e9 0%,#c8e6c9 40%,#a5d6a7 100%);border:1.5px solid #66bb6a;border-radius:16px;padding:12px 14px;position:relative;box-shadow:0 4px 20px rgba(76,175,80,.15)}
+.egg-reply::before{content:'';position:absolute;top:-7px;left:18px;width:14px;height:14px;background:#e8f5e9;border-left:1.5px solid #66bb6a;border-top:1.5px solid #66bb6a;transform:rotate(45deg)}
+.egg-reply-tag{display:inline-flex;align-items:center;gap:4px;background:linear-gradient(135deg,#07C160,#00a854);color:#fff;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;margin-bottom:8px;box-shadow:0 2px 8px rgba(7,193,96,.3)}
+.egg-reply-author{display:flex;align-items:center;gap:6px;margin-bottom:6px}
+.egg-reply-author-avatar{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;color:#fff;background:linear-gradient(135deg,#07C160,#00e676);border:2px solid #66bb6a}
+.egg-reply-author-name{font-size:12px;font-weight:700;color:#1b5e20}
+.egg-reply-text{font-size:14px;color:#2e7d32;line-height:1.6}
 
-  /* ===== Section Divider ===== */
-  .section-divider { height: 8px; background: #f5f5f5; }
+.egg-sparkles{position:absolute;font-size:12px;pointer-events:none;animation:sparkleFloat 2s ease-in-out infinite}
+.egg-sparkles.s1{top:-8px;right:12px;animation-delay:0s}
+.egg-sparkles.s2{top:4px;right:32px;animation-delay:.4s}
+.egg-sparkles.s3{bottom:-4px;right:8px;animation-delay:.8s}
+@keyframes sparkleFloat{0%,100%{transform:translateY(0) scale(1);opacity:1}50%{transform:translateY(-5px) scale(1.3);opacity:.6}}
 
-  /* ===== Comment Input Bar ===== */
-  .comment-input-bar {
-    position: absolute; bottom: 0; left: 0; right: 0;
-    background: white; border-top: 0.5px solid #e5e5e5;
-    padding: 8px 12px;
-    display: flex; align-items: center; gap: 8px;
-  }
-  .comment-input-placeholder {
-    flex: 1; background: #f5f5f5; border-radius: 20px;
-    padding: 10px 16px; font-size: 14px; color: #bbb;
-  }
-  .input-actions { display: flex; gap: 12px; }
-  .input-action { font-size: 22px; color: #999; cursor: pointer; }
+/* Section Divider */
+.section-divider{height:8px;background:#f5f5f5}
 
-  /* Full bottom bar like screenshot */
-  .full-bottom-bar {
-    position: absolute; bottom: 0; left: 0; right: 0;
-    background: white; border-top: 0.5px solid #e5e5e5;
-    padding: 8px 12px; display: flex; align-items: center; gap: 8px;
-  }
-  .full-bottom-input {
-    flex: 1; background: #f5f5f5; border-radius: 20px;
-    padding: 9px 16px; font-size: 14px; color: #bbb;
-  }
-  .full-bottom-actions { display: flex; align-items: center; gap: 4px; }
-  .fba-item {
-    display: flex; flex-direction: column; align-items: center; gap: 1px;
-    font-size: 10px; color: #999; min-width: 40px;
-  }
-  .fba-item .fba-icon { font-size: 20px; }
-  .fba-item .fba-count { font-weight: 600; color: #666; }
+/* Comment Input Bar */
+.comment-input-bar{position:absolute;bottom:0;left:0;right:0;background:#fff;border-top:.5px solid #e5e5e5;padding:8px 12px;display:flex;align-items:center;gap:8px}
+.comment-input-placeholder{flex:1;background:#f5f5f5;border-radius:20px;padding:10px 16px;font-size:14px;color:#bbb}
+.input-actions{display:flex;gap:12px}
+.input-action{font-size:22px;color:#999;cursor:pointer}
 
-  /* ===== Scrollable screen ===== */
-  .screen-content {
-    height: 620px; overflow-y: auto; padding-bottom: 56px;
-  }
-  .screen-content::-webkit-scrollbar { width: 0; }
+/* Full bottom bar */
+.full-bottom-bar{position:absolute;bottom:0;left:0;right:0;background:#fff;border-top:.5px solid #e5e5e5;padding:8px 12px;display:flex;align-items:center;gap:8px}
+.full-bottom-input{flex:1;background:#f5f5f5;border-radius:20px;padding:9px 16px;font-size:14px;color:#bbb}
+.full-bottom-actions{display:flex;align-items:center;gap:4px}
+.fba-item{display:flex;flex-direction:column;align-items:center;gap:1px;font-size:10px;color:#999;min-width:40px}
+.fba-item .fba-icon{font-size:20px}
+.fba-item .fba-count{font-weight:600;color:#666}
 
-  /* Demo label */
-  .demo-label {
-    position: absolute; top: 36px; right: -2px;
-    background: linear-gradient(135deg, #6366f1, #a855f7);
-    color: white; font-size: 10px; padding: 3px 12px 3px 8px;
-    border-radius: 6px 0 0 6px; font-weight: 700; z-index: 50;
-    letter-spacing: 1px;
-  }
+/* Scrollable screen */
+.screen-content{height:620px;overflow-y:auto;padding-bottom:56px}
+.screen-content::-webkit-scrollbar{width:0}
 
-  /* ===== Easter Egg Setup (Author Side) ===== */
-  .egg-setup-section { background: white; margin-top: 8px; padding: 16px; }
-  .egg-setup-header {
-    display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;
-  }
-  .egg-setup-title {
-    display: flex; align-items: center; gap: 6px;
-    font-size: 15px; font-weight: 700; color: #1a1a1a;
-  }
-  .egg-add-btn {
-    font-size: 13px; color: #6366f1; background: #f0eeff;
-    border: none; padding: 6px 14px; border-radius: 20px;
-    cursor: pointer; font-weight: 600;
-  }
-  .egg-item {
-    background: #fafafa; border: 1px solid #eee; border-radius: 14px;
-    padding: 14px; margin-bottom: 10px; position: relative;
-  }
-  .egg-item.filled {
-    background: linear-gradient(135deg, #fffbeb, #fef3c7);
-    border-color: #fbbf24;
-  }
-  .egg-item-header {
-    display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;
-  }
-  .egg-number {
-    background: #6366f1; color: white;
-    width: 22px; height: 22px; border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 12px; font-weight: 700;
-  }
-  .egg-number.gold { background: linear-gradient(135deg, #f59e0b, #d97706); }
-  .egg-delete { font-size: 18px; color: #ccc; cursor: pointer; background: none; border: none; }
-  .egg-field { margin-bottom: 8px; }
-  .egg-field-label { font-size: 12px; color: #888; margin-bottom: 4px; display: flex; align-items: center; gap: 4px; }
-  .egg-field-input {
-    width: 100%; padding: 8px 12px; border: 1px solid #e0e0e0;
-    border-radius: 10px; font-size: 14px; background: white;
-  }
-  .egg-field-input.has-value { border-color: #6366f1; background: #faf9ff; }
-  .egg-preview-tag {
-    display: inline-flex; align-items: center; gap: 4px;
-    background: linear-gradient(135deg, #6366f1, #a855f7);
-    color: white; padding: 3px 10px; border-radius: 12px;
-    font-size: 11px; font-weight: 600;
-  }
-  .egg-templates { margin-top: 12px; padding-top: 12px; border-top: 1px dashed #e0e0e0; }
-  .egg-templates-title { font-size: 12px; color: #999; margin-bottom: 8px; }
-  .egg-template-item {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 8px 12px; background: #faf9ff; border-radius: 10px;
-    margin-bottom: 6px; cursor: pointer; transition: background 0.2s;
-  }
-  .egg-template-item:hover { background: #f0eeff; }
-  .egg-template-item .kw { font-weight: 700; color: #6366f1; font-size: 13px; }
-  .egg-template-item .reply { color: #999; font-size: 12px; }
-  .egg-template-item .use-btn {
-    font-size: 12px; color: #6366f1; background: white; border: 1px solid #6366f1;
-    border-radius: 14px; padding: 2px 12px; cursor: pointer;
-  }
-  .publish-bar {
-    position: absolute; bottom: 0; left: 0; right: 0;
-    background: white; padding: 10px 16px; border-top: 0.5px solid #e5e5e5;
-    display: flex; justify-content: space-between; align-items: center;
-  }
-  .publish-btn {
-    background: linear-gradient(135deg, #6366f1, #a855f7);
-    color: white; border: none; border-radius: 24px;
-    padding: 12px 32px; font-size: 16px; font-weight: 700;
-    cursor: pointer; box-shadow: 0 4px 16px rgba(99,102,241,0.3);
-  }
-  .draft-btn {
-    background: #f5f5f5; color: #666; border: none;
-    border-radius: 24px; padding: 12px 20px; font-size: 14px; cursor: pointer;
-  }
+/* ===== Easter Egg Setup (Author Side) ===== */
+.egg-setup-section{background:#fff;margin-top:8px;padding:16px}
+.egg-setup-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.egg-setup-title{display:flex;align-items:center;gap:6px;font-size:15px;font-weight:700;color:#1a1a1a}
+.egg-add-btn{font-size:13px;color:#07C160;background:#e8f5e9;border:none;padding:6px 14px;border-radius:20px;cursor:pointer;font-weight:600}
+.egg-item{background:#fafafa;border:1px solid #eee;border-radius:14px;padding:14px;margin-bottom:10px;position:relative}
+.egg-item.filled{background:linear-gradient(135deg,#f0faf4,#e8f5e9);border-color:#81c784}
+.egg-item-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.egg-number{background:#07C160;color:#fff;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700}
+.egg-number.gold{background:linear-gradient(135deg,#07C160,#00a854)}
+.egg-delete{font-size:18px;color:#ccc;cursor:pointer;background:none;border:none}
+.egg-field{margin-bottom:8px}
+.egg-field-label{font-size:12px;color:#888;margin-bottom:4px;display:flex;align-items:center;gap:4px}
+.egg-field-input{width:100%;padding:8px 12px;border:1px solid #e0e0e0;border-radius:10px;font-size:14px;background:#fff}
+.egg-field-input.has-value{border-color:#07C160;background:#f6fef9}
+.egg-preview-tag{display:inline-flex;align-items:center;gap:4px;background:linear-gradient(135deg,#07C160,#00a854);color:#fff;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:600}
+.egg-templates{margin-top:12px;padding-top:12px;border-top:1px dashed #e0e0e0}
+.egg-templates-title{font-size:12px;color:#999;margin-bottom:8px}
+.egg-template-item{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:#f6fef9;border-radius:10px;margin-bottom:6px;cursor:pointer;transition:background .2s}
+.egg-template-item:hover{background:#e8f5e9}
+.egg-template-item .kw{font-weight:700;color:#07C160;font-size:13px}
+.egg-template-item .reply{color:#999;font-size:12px}
+.egg-template-item .use-btn{font-size:12px;color:#07C160;background:#fff;border:1px solid #07C160;border-radius:14px;padding:2px 12px;cursor:pointer}
+.publish-bar{position:absolute;bottom:0;left:0;right:0;background:#fff;padding:10px 16px;border-top:.5px solid #e5e5e5;display:flex;justify-content:space-between;align-items:center}
+.publish-btn{background:#07C160;color:#fff;border:none;border-radius:24px;padding:12px 32px;font-size:16px;font-weight:700;cursor:pointer;box-shadow:0 4px 16px rgba(7,193,96,.3)}
+.draft-btn{background:#f5f5f5;color:#666;border:none;border-radius:24px;padding:12px 20px;font-size:14px;cursor:pointer}
 
-  /* ===== SCENE 2: Trigger animation (redesigned) ===== */
-  .zero-comment-empty {
-    text-align: center; padding: 40px 20px; color: #ccc;
-  }
-  .zero-comment-empty .empty-icon { font-size: 48px; margin-bottom: 12px; opacity: 0.5; }
-  .zero-comment-empty .empty-text { font-size: 14px; color: #ccc; }
-  .zero-comment-empty .empty-hint { font-size: 12px; color: #ddd; margin-top: 6px; }
+/* Hint box */
+.setup-hint{background:#e8f5e9;border-radius:12px;padding:10px 14px;margin-bottom:14px;font-size:12px;color:#2e7d32;line-height:1.6}
 
-  /* Trigger button area */
-  .trigger-area {
-    text-align: center; padding: 20px;
-  }
-  .try-btn {
-    display: inline-flex; align-items: center; gap: 8px;
-    margin: 16px auto 0;
-    background: linear-gradient(135deg, #6366f1, #a855f7, #ec4899);
-    background-size: 200% 200%;
-    animation: gradientMove 3s ease-in-out infinite;
-    color: white; border: none; border-radius: 28px;
-    padding: 14px 32px; font-size: 15px; font-weight: 700;
-    cursor: pointer; box-shadow: 0 6px 24px rgba(99,102,241,0.35);
-    transition: transform 0.2s, box-shadow 0.2s;
-  }
-  @keyframes gradientMove {
-    0%,100% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-  }
-  .try-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(99,102,241,0.45); }
-  .try-btn:active { transform: scale(0.97); }
-  .try-btn.done {
-    background: #e5e7eb; color: #9ca3af; box-shadow: none; animation: none; cursor: default;
-  }
-  .try-btn.done:hover { transform: none; box-shadow: none; }
-  .reset-btn {
-    display: block; margin: 10px auto 0;
-    background: none; border: none; color: #aaa;
-    font-size: 13px; cursor: pointer;
-  }
-  .reset-btn:hover { color: #6366f1; }
+/* ===== SCENE 2: Trigger animation ===== */
+.zero-comment-empty{text-align:center;padding:40px 20px;color:#ccc}
+.zero-comment-empty .empty-icon{font-size:48px;margin-bottom:12px;opacity:.5}
+.zero-comment-empty .empty-text{font-size:14px;color:#ccc}
+.zero-comment-empty .empty-hint{font-size:12px;color:#ddd;margin-top:6px}
 
-  /* ===== Confetti Canvas ===== */
-  #confetti-canvas {
-    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-    pointer-events: none; z-index: 300;
-  }
+.trigger-area{text-align:center;padding:20px}
+.try-btn{display:inline-flex;align-items:center;gap:8px;margin:16px auto 0;background:#07C160;color:#fff;border:none;border-radius:28px;padding:14px 32px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 6px 24px rgba(7,193,96,.35);transition:transform .2s,box-shadow .2s}
+.try-btn:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(7,193,96,.45)}
+.try-btn:active{transform:scale(.97)}
+.try-btn.done{background:#e5e7eb;color:#9ca3af;box-shadow:none;cursor:default}
+.try-btn.done:hover{transform:none;box-shadow:none}
+.reset-btn{display:block;margin:10px auto 0;background:none;border:none;color:#aaa;font-size:13px;cursor:pointer}
+.reset-btn:hover{color:#07C160}
 
-  /* Toast notification (redesigned) */
-  .toast {
-    position: absolute; top: 70px; left: 50%; transform: translateX(-50%) translateY(-20px);
-    background: linear-gradient(135deg, #6366f1, #a855f7);
-    color: white; padding: 12px 24px; border-radius: 24px;
-    font-size: 14px; font-weight: 600;
-    box-shadow: 0 8px 32px rgba(99,102,241,0.4);
-    z-index: 400; opacity: 0; transition: all 0.5s cubic-bezier(0.34,1.56,0.64,1);
-    white-space: nowrap; backdrop-filter: blur(8px);
-  }
-  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+/* Confetti Canvas */
+#confetti-canvas{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:300}
 
-  /* New comment slide-in */
-  .comment-item.new-comment { animation: slideUp 0.5s cubic-bezier(0.34,1.56,0.64,1); }
-  @keyframes slideUp {
-    from { transform: translateY(30px); opacity: 0; }
-    to { transform: translateY(0); opacity: 1; }
-  }
-  .egg-reply-wrapper.new-reply {
-    animation: eggBounceIn 0.7s cubic-bezier(0.34,1.56,0.64,1);
-  }
-  @keyframes eggBounceIn {
-    0% { transform: scale(0) rotate(-10deg); opacity: 0; }
-    60% { transform: scale(1.05) rotate(2deg); }
-    100% { transform: scale(1) rotate(0); opacity: 1; }
-  }
+/* Toast */
+.toast{position:absolute;top:70px;left:50%;transform:translateX(-50%) translateY(-20px);background:#07C160;color:#fff;padding:12px 24px;border-radius:24px;font-size:14px;font-weight:600;box-shadow:0 8px 32px rgba(7,193,96,.4);z-index:400;opacity:0;transition:all .5s cubic-bezier(.34,1.56,.64,1);white-space:nowrap;backdrop-filter:blur(8px)}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
-  /* Keyword highlight in comment */
-  .kw-highlight {
-    color: #6366f1; font-weight: 700;
-    background: linear-gradient(135deg, #ede9fe, #e0e7ff);
-    padding: 1px 4px; border-radius: 4px;
-  }
+/* New comment animations */
+.comment-item.new-comment{animation:slideUp .5s cubic-bezier(.34,1.56,.64,1)}
+@keyframes slideUp{from{transform:translateY(30px);opacity:0}to{transform:translateY(0);opacity:1}}
+.egg-reply-wrapper.new-reply{animation:eggBounceIn .7s cubic-bezier(.34,1.56,.64,1)}
+@keyframes eggBounceIn{0%{transform:scale(0) rotate(-10deg);opacity:0}60%{transform:scale(1.05) rotate(2deg)}100%{transform:scale(1) rotate(0);opacity:1}}
 
-  /* ===== Notification Scene ===== */
-  .notification-item {
-    display: flex; gap: 12px; padding: 14px 16px;
-    background: white; border-bottom: 0.5px solid #f0f0f0;
-  }
-  .notification-item.unread { background: #faf9ff; }
-  .notif-icon {
-    width: 44px; height: 44px; border-radius: 14px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 22px; flex-shrink: 0;
-  }
-  .notif-icon.egg { background: linear-gradient(135deg, #fef3c7, #fde68a); }
-  .notif-icon.like { background: #ffe4e6; }
-  .notif-icon.system { background: #e0e7ff; }
-  .notif-body { flex: 1; }
-  .notif-title { font-size: 14px; font-weight: 600; color: #333; line-height: 1.5; }
-  .notif-desc { font-size: 13px; color: #888; margin-top: 4px; line-height: 1.5; }
-  .notif-time { font-size: 12px; color: #ccc; margin-top: 4px; }
-  .notif-dot { width: 8px; height: 8px; background: #ef4444; border-radius: 50%; flex-shrink: 0; margin-top: 6px; }
+/* Keyword highlight */
+.kw-highlight{color:#07C160;font-weight:700;background:#e8f5e9;padding:1px 4px;border-radius:4px}
 
-  /* Dashboard */
-  .dashboard-card {
-    background: white; border-radius: 16px; padding: 16px;
-    margin-bottom: 12px; box-shadow: 0 2px 12px rgba(0,0,0,0.04);
-  }
-  .dashboard-card-title {
-    font-size: 14px; font-weight: 700; color: #1a1a1a;
-    margin-bottom: 12px; display: flex; align-items: center; gap: 6px;
-  }
-  .stat-row { display: flex; justify-content: space-around; text-align: center; }
-  .stat-item .stat-num {
-    font-size: 28px; font-weight: 800;
-    background: linear-gradient(135deg, #6366f1, #a855f7);
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-  }
-  .stat-item .stat-label { font-size: 12px; color: #999; margin-top: 4px; }
-  .egg-stat-item {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 10px 0; border-bottom: 0.5px solid #f5f5f5;
-  }
-  .egg-stat-item:last-child { border-bottom: none; }
-  .egg-stat-left { display: flex; align-items: center; gap: 10px; }
-  .egg-stat-keyword {
-    background: #f0eeff; color: #6366f1; padding: 3px 10px;
-    border-radius: 8px; font-size: 13px; font-weight: 700;
-  }
-  .egg-stat-reply { font-size: 13px; color: #999; max-width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .egg-stat-count { font-size: 14px; font-weight: 800; color: #f59e0b; }
+/* ===== Notification Scene ===== */
+.notification-item{display:flex;gap:12px;padding:14px 16px;background:#fff;border-bottom:.5px solid #f0f0f0}
+.notification-item.unread{background:#f6fef9}
+.notif-icon{width:44px;height:44px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.notif-icon.egg{background:#e8f5e9}
+.notif-icon.like{background:#ffe4e6}
+.notif-icon.system{background:#e8f5e9}
+.notif-body{flex:1}
+.notif-title{font-size:14px;font-weight:600;color:#333;line-height:1.5}
+.notif-desc{font-size:13px;color:#888;margin-top:4px;line-height:1.5}
+.notif-time{font-size:12px;color:#ccc;margin-top:4px}
+.notif-dot{width:8px;height:8px;background:#07C160;border-radius:50%;flex-shrink:0;margin-top:6px}
 
-  /* Hint box */
-  .setup-hint {
-    background: #f0eeff; border-radius: 12px; padding: 10px 14px;
-    margin-bottom: 14px; font-size: 12px; color: #6366f1; line-height: 1.6;
-  }
+/* Dashboard */
+.dashboard-card{background:#fff;border-radius:16px;padding:16px;margin-bottom:12px;box-shadow:0 2px 12px rgba(0,0,0,.04)}
+.dashboard-card-title{font-size:14px;font-weight:700;color:#1a1a1a;margin-bottom:12px;display:flex;align-items:center;gap:6px}
+.stat-row{display:flex;justify-content:space-around;text-align:center}
+.stat-item .stat-num{font-size:28px;font-weight:800;color:#07C160}
+.stat-item .stat-label{font-size:12px;color:#999;margin-top:4px}
+.egg-stat-item{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:.5px solid #f5f5f5}
+.egg-stat-item:last-child{border-bottom:none}
+.egg-stat-left{display:flex;align-items:center;gap:10px}
+.egg-stat-keyword{background:#e8f5e9;color:#07C160;padding:3px 10px;border-radius:8px;font-size:13px;font-weight:700}
+.egg-stat-reply{font-size:13px;color:#999;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.egg-stat-count{font-size:14px;font-weight:800;color:#07C160}
 
-  /* Comment input with send */
-  .input-with-send {
-    position: absolute; bottom: 0; left: 0; right: 0;
-    background: white; border-top: 0.5px solid #e5e5e5;
-    padding: 8px 12px; display: flex; align-items: center; gap: 8px;
-  }
-  .input-field {
-    flex: 1; background: #f5f5f5; border: none; border-radius: 20px;
-    padding: 10px 16px; font-size: 14px; outline: none; color: #333;
-  }
-  .send-btn {
-    background: linear-gradient(135deg, #6366f1, #a855f7);
-    color: white; border: none; border-radius: 20px;
-    padding: 10px 20px; font-size: 14px; font-weight: 600; cursor: pointer;
-    white-space: nowrap;
-  }
+/* Comment input with send */
+.input-with-send{position:absolute;bottom:0;left:0;right:0;background:#fff;border-top:.5px solid #e5e5e5;padding:8px 12px;display:flex;align-items:center;gap:8px}
+.input-field{flex:1;background:#f5f5f5;border:none;border-radius:20px;padding:10px 16px;font-size:14px;outline:none;color:#333}
+.send-btn{background:#07C160;color:#fff;border:none;border-radius:20px;padding:10px 20px;font-size:14px;font-weight:600;cursor:pointer;white-space:nowrap}
 
-  /* ===== Trigger glow ring ===== */
-  .glow-ring {
-    position: absolute; top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    width: 0; height: 0;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(99,102,241,0.3), transparent 70%);
-    z-index: 250; pointer-events: none; opacity: 0;
-  }
-  .glow-ring.animate {
-    animation: glowExpand 0.8s ease-out forwards;
-  }
-  @keyframes glowExpand {
-    0% { width: 0; height: 0; opacity: 0.8; }
-    100% { width: 600px; height: 600px; opacity: 0; }
-  }
+/* Glow ring */
+.glow-ring{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:0;height:0;border-radius:50%;background:radial-gradient(circle,rgba(7,193,96,.3),transparent 70%);z-index:250;pointer-events:none;opacity:0}
+.glow-ring.animate{animation:glowExpand .8s ease-out forwards}
+@keyframes glowExpand{0%{width:0;height:0;opacity:.8}100%{width:600px;height:600px;opacity:0}}
 </style>
 </head>
 <body>
 
 <div class="page-header">
-  <h1>🎁 评论彩蛋功能 Demo</h1>
+  <h1>🎁 评论彩蛋功能 <span class="demo-tag">DEMO版</span></h1>
   <p>让评论变成一场探索游戏</p>
 </div>
 
@@ -733,10 +303,10 @@
         
         <div class="screen-content">
           <!-- Post preview -->
-          <div class="post-content" style="border-bottom: 0.5px solid #f0f0f0;">
-            <div style="color: #999; font-size: 12px; margin-bottom: 8px; font-weight: 500;">内容预览</div>
+          <div class="post-content" style="border-bottom:.5px solid #f0f0f0;">
+            <div style="color:#999;font-size:12px;margin-bottom:8px;font-weight:500;">内容预览</div>
             <div class="post-title">Mac mini更香了，乞丐版"养10只龙虾"？🦞🖥</div>
-            <div class="post-text" style="font-size: 13px; -webkit-line-clamp: 3; display: -webkit-box; -webkit-box-orient: vertical; overflow: hidden;">
+            <div class="post-text" style="font-size:13px;-webkit-line-clamp:3;display:-webkit-box;-webkit-box-orient:vertical;overflow:hidden;">
               入手 16G+256G 的乞丐版Mac mini 真是超值了。低功耗 24h 挂机"养虾"的高性价比，加上 Wokyis M5 1984 麦金塔的扩展坞的复古美学...
             </div>
             <div class="post-images">
@@ -857,7 +427,8 @@
                 </div>
                 <span class="use-btn">套用</span>
               </div>
-            </div>          </div>
+            </div>
+          </div>
         </div>
 
         <div class="publish-bar">
@@ -950,7 +521,7 @@
               <div class="comment-sort">按热度 ▾</div>
             </div>
 
-            <!-- Egg Hint Banner - always visible -->
+            <!-- Egg Hint Banner -->
             <div class="egg-hint-banner" id="egg-banner">
               <span class="icon">🎁</span>
               <span>本帖藏有 <b>3</b> 个评论彩蛋，试试评论触发～</span>
@@ -966,7 +537,7 @@
             <!-- New comments will be injected here -->
             <div id="new-comment-area"></div>
             
-            <div style="height: 80px;"></div>
+            <div style="height:80px;"></div>
           </div>
         </div>
 
@@ -982,7 +553,7 @@
         <!-- Comment Input -->
         <div class="input-with-send">
           <input class="input-field" id="comment-input" placeholder="聊一聊" value="" readonly>
-          <button class="send-btn" id="send-btn" onclick="triggerEgg()" style="opacity:0.5;pointer-events:none;">发送</button>
+          <button class="send-btn" id="send-btn" onclick="triggerEgg()" style="opacity:.5;pointer-events:none;">发送</button>
         </div>
       </div>
     </div>
@@ -1021,7 +592,7 @@
               <div class="comment-sort">按热度 ▾</div>
             </div>
 
-            <div class="egg-hint-banner" style="background:linear-gradient(135deg,#d1fae5,#a7f3d0);border-color:#34d399;color:#065f46;">
+            <div class="egg-hint-banner" style="background:#e8f5e9;border-color:#66bb6a;color:#1b5e20;">
               <span class="icon">🔥</span>
               <span>已有 <b>67</b> 人触发彩蛋 · 还有 <b>1</b> 个未被发现（提示：关于花了多少钱…）</span>
             </div>
@@ -1143,7 +714,7 @@
               </div>
             </div>
 
-            <div style="height: 80px;"></div>
+            <div style="height:80px;"></div>
           </div>
         </div>
 
@@ -1178,7 +749,7 @@
         <div class="app-nav">
           <span class="back">‹</span>
           <span class="title">消息中心</span>
-          <span class="action" style="font-size:13px;color:#6366f1;">全部已读</span>
+          <span class="action" style="font-size:13px;color:#07C160;">全部已读</span>
         </div>
 
         <div class="screen-content">
@@ -1306,7 +877,7 @@
     launch(count = 60) {
       this.resize();
       this.particles = [];
-      const colors = ['#6366f1','#a855f7','#ec4899','#f59e0b','#10b981','#06b6d4','#f43f5e','#fbbf24'];
+      const colors = ['#07C160','#00e676','#4caf50','#f59e0b','#10b981','#06b6d4','#66bb6a','#81c784'];
       const cx = this.canvas.width / 2;
       const cy = this.canvas.height * 0.35;
       for (let i = 0; i < count; i++) {
@@ -1365,7 +936,7 @@
   });
 
   // ===== Trigger Flow =====
-  let triggerState = 0; // 0=idle, 1=typing, 2=sent, 3=egg1, 4=egg2, 5=done
+  let triggerState = 0;
 
   function startTrigger() {
     if (triggerState !== 0) return;
@@ -1378,7 +949,6 @@
     tryBtn.classList.add('done');
     tryBtn.innerHTML = '<span>⏳</span> 模拟中...';
 
-    // Simulate typing
     const text = '有没有翻车的经历啊哈哈，这个扩展坞在哪买的';
     let i = 0;
     input.value = '';
@@ -1393,7 +963,6 @@
         }
       } else {
         clearInterval(typeInterval);
-        // Auto send after a brief pause
         setTimeout(() => triggerEgg(), 600);
       }
     }, 50);
@@ -1412,10 +981,8 @@
     const input = document.getElementById('comment-input');
     const sendBtn = document.getElementById('send-btn');
 
-    // Hide empty state
     emptyState.style.display = 'none';
 
-    // Show user's comment
     area.innerHTML = `
       <div class="comment-item new-comment">
         <div class="comment-avatar ca-4">我</div>
@@ -1433,28 +1000,22 @@
       </div>
     `;
 
-    // Update counts
     document.getElementById('comment-num').textContent = '1';
     document.getElementById('header-count').textContent = '1';
 
-    // Clear input
     input.value = '';
     sendBtn.style.opacity = '0.5';
     sendBtn.style.pointerEvents = 'none';
 
-    // Scroll
     setTimeout(() => { content.scrollTop = content.scrollHeight; }, 150);
 
-    // Egg 1 after delay
     setTimeout(() => {
       triggerState = 3;
 
-      // Glow effect
       const glow = document.getElementById('glow-ring');
       glow.classList.add('animate');
       setTimeout(() => glow.classList.remove('animate'), 900);
 
-      // Confetti
       confetti.launch(50);
 
       area.innerHTML += `
@@ -1473,22 +1034,17 @@
         </div>
       `;
 
-      // Toast
       toast.textContent = '🎉 恭喜触发评论彩蛋！「翻车」';
       toast.classList.add('show');
       setTimeout(() => toast.classList.remove('show'), 2500);
 
-      // Update banner
       banner.innerHTML = '<span class="icon">🔥</span><span>已触发 <b>1</b> 个彩蛋 · 还有 <b>2</b> 个待发现</span>';
 
-      // Scroll
       setTimeout(() => { content.scrollTop = content.scrollHeight; }, 200);
 
-      // Egg 2
       setTimeout(() => {
         triggerState = 4;
 
-        // Second confetti burst
         confetti.launch(35);
 
         area.innerHTML += `
@@ -1506,11 +1062,10 @@
           </div>
         `;
 
-        // Update
         banner.innerHTML = '<span class="icon">🔥</span><span>一条评论触发 <b>2</b> 个彩蛋！还有 <b>1</b> 个待发现</span>';
-        banner.style.background = 'linear-gradient(135deg, #d1fae5, #a7f3d0)';
-        banner.style.borderColor = '#34d399';
-        banner.style.color = '#065f46';
+        banner.style.background = '#e8f5e9';
+        banner.style.borderColor = '#66bb6a';
+        banner.style.color = '#1b5e20';
 
         toast.textContent = '🎉 又一个！触发了「扩展坞」彩蛋';
         toast.classList.add('show');
@@ -1547,14 +1102,13 @@
     tryBtn.innerHTML = '<span>🎁</span> 模拟用户评论触发彩蛋';
     
     banner.innerHTML = '<span class="icon">🎁</span><span>本帖藏有 <b>3</b> 个评论彩蛋，试试评论触发～</span>';
-    banner.style.background = 'linear-gradient(135deg, #fef3c7, #fde68a)';
-    banner.style.borderColor = '#fbbf24';
-    banner.style.color = '#92400e';
+    banner.style.background = '#e8f5e9';
+    banner.style.borderColor = '#81c784';
+    banner.style.color = '#2e7d32';
 
     document.getElementById('comment-num').textContent = '0';
     document.getElementById('header-count').textContent = '0';
 
-    // Clear confetti
     const canvas = document.getElementById('confetti-canvas');
     const ctx = canvas.getContext('2d');
     ctx.clearRect(0, 0, canvas.width, canvas.height);
